@@ -1,6 +1,10 @@
 from bs4 import BeautifulSoup
 import urllib.request as request
 import time
+import praw
+import re
+import os
+from configparser import ConfigParser
 
 
 def parse_calendar(webpage):
@@ -19,13 +23,46 @@ def generate_table(dates, events):
             try:
                 out += '| ' + events[i][j] + ' | ' + time.strftime('%B %d',
                                                                    time.strptime(dates[i], '%A, %B %d, %Y')) + ' |\n'
-            except:
+            except ValueError:
                 out += '| ' + events[i][j] + ' | ' + dates[i][:-6:] + ' |\n'
     return out
 
 
+def set_sidebar(out):
+    r = praw.Reddit('/r/rowing sidebar updater')
+
+    if os.path.isfile('settings.cfg'):
+        config = ConfigParser()
+        config.read('settings.cfg')
+        username = config.get('auth', 'username')
+        password = config.get('auth', 'password')
+    else:
+        username = os.environ['REDDIT_USERNAME']
+        password = os.environ['REDDIT_PASSWORD']
+
+    print('[*] Logging in as %s...' % username)
+    r.login(username, password)
+    print('[*] Login successful...')
+
+    sub = 'Jammie1'
+    settings = r.get_settings(sub)
+    desc = settings['description']
+    table = re.compile('\|.*\|', re.DOTALL)
+    desc = (re.sub(table, out, desc))
+    r.update_settings(r.get_subreddit(sub), description=desc)
+    print('[*] Logging out...')
+    r.clear_authentication()
+
+
 url = 'http://www.row2k.com/calendar/index.cfm?type=week'
-page = request.urlopen(url).read().decode('utf-8')
-dates, events = parse_calendar(page)
-out = generate_table(dates, events)
-print(out)
+while True:
+    print('[*] Fetching page...')
+    page = request.urlopen(url).read().decode('utf-8')
+    print('[*] Parsing calendar...')
+    dates, events = parse_calendar(page)
+    print('[*] Generating table...')
+    out = generate_table(dates, events)
+    print('[*] Updating sidebar...')
+    set_sidebar(out)
+    print('[*] Sleeping...')
+    time.sleep(10)
