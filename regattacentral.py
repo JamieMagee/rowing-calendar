@@ -11,7 +11,8 @@ from configparser import ConfigParser
 def parse_calendar(webpage):
     global dates, events, web, locations, locationsweb
     tree = html.fromstring(webpage)
-    dates.append([datetime.strptime(date.replace(' \n      ', ''), '%A%m/%d/%y') for date in tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
+    dates.append([datetime.strptime(date.replace(' \n      ', ''), '%A%m/%d/%y') for date in
+                  tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
     events.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/text()'))
     web.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/@href'))
     locations.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[10]/a/text()'))
@@ -19,10 +20,11 @@ def parse_calendar(webpage):
 
 
 def generate_table(dates, events, web, locations, locationsweb):
-    out = '| **Race** | **Date** | **Venue** |\n|-|-|-|\n'
+    out = '|**Race**|**Date**|**Venue**|\n|-|-|-|\n'
     for i in range(len(dates)):
         if (dates[i] - datetime.now()).days < 7:
-            out += '| [' + events[i] + '](https://www.regattacentral.com' + web[i] + ') | ' + dates[i].strftime('%d %B') + ' | [' + locations[i] + '](https://www.regattacentral.com' + locationsweb[i] + ') |\n'
+            out += '|[' + events[i] + '](https://www.regattacentral.com' + web[i] + ')|' + dates[i].strftime(
+                '%d %B') + '|' + locations[i] + '|\n'
         else:
             return out
 
@@ -63,7 +65,7 @@ while True:
     dates, events, web, locations, locationsweb = [], [], [], [], []
     for country in countries:
         print('[*] Fetching page...')
-        page = request.urlopen(url+country).read().decode('utf-8')
+        page = request.urlopen(url + country).read().decode('utf-8')
         print('[*] Parsing calendar...')
         parse_calendar(page)
 
@@ -76,6 +78,8 @@ while True:
     print('[*] Generating table...')
     out = generate_table(dates, events, web, locations, locationsweb)
     print('[*] Updating sidebar...')
+    print(out)
+    print(len(out))
     set_sidebar(out)
     print('[*] Sleeping...')
     time.sleep(10)
