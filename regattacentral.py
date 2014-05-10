@@ -78,8 +78,6 @@ while True:
     print('[*] Generating table...')
     out = generate_table(dates, events, web, locations, locationsweb)
     print('[*] Updating sidebar...')
-    print(out)
-    print(len(out))
     set_sidebar(out)
     print('[*] Sleeping...')
     time.sleep(10)
