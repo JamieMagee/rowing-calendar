@@ -1,15 +1,2 @@
-Django==1.6.4
-Jinja2==2.7.2
-MarkupSafe==0.21
-Pillow==2.4.0
-PyUserInput==0.1.9
-beautifulsoup4==4.3.2
-coverage==3.7.1
-glue==0.9.4
 lxml==3.3.5
-mechanize==0.2.5
 praw==2.1.15
-requests==2.2.1
-simplejson==3.4.1
-six==1.6.1
-update-checker==0.9
