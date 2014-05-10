@@ -45,7 +45,7 @@ def set_sidebar(out):
     r.login(username, password)
     print('[*] Login successful...')
 
-    sub = 'Jammie1'
+    sub = 'Rowing'
     settings = r.get_settings(sub)
     desc = settings['description']
     table = re.compile('\|.*\|', re.DOTALL)
@@ -80,4 +80,4 @@ while True:
     print('[*] Updating sidebar...')
     set_sidebar(out)
     print('[*] Sleeping...')
-    time.sleep(10)
+    time.sleep(86400)
