@@ -69,11 +69,11 @@ while True:
         print('[*] Parsing calendar...')
         parse_calendar(page)
 
+    events = [points[1] for points in sorted(zip(flatten_list(dates), flatten_list(events)))]
+    web = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(web)))]
+    locations = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(locations)))]
+    locationsweb = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(locationsweb)))]
     dates = sorted(flatten_list(dates))
-    events = [x for (y, x) in sorted(zip(dates, flatten_list(events)))]
-    web = [x for (y, x) in sorted(zip(dates, flatten_list(web)))]
-    locations = [x for (y, x) in sorted(zip(dates, flatten_list(locations)))]
-    locationsweb = [x for (y, x) in sorted(zip(dates, flatten_list(locationsweb)))]
 
     print('[*] Generating table...')
     out = generate_table(dates, events, web, locations, locationsweb)
