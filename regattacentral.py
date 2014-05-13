@@ -15,7 +15,7 @@ def parse_calendar(webpage):
                   tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
     events.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/text()'))
     web.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/@href'))
-    locations.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[10]/a/text()'))
+    locations.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[10]/a/text()|//*[@id="tableResults"]/tbody/tr[*]/td[10]/text()'))
     locationsweb.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[10]/a/@href'))
 
 
@@ -69,14 +69,19 @@ while True:
         print('[*] Parsing calendar...')
         parse_calendar(page)
 
-    events = [points[1] for points in sorted(zip(flatten_list(dates), flatten_list(events)))]
-    web = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(web)))]
-    locations = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(locations)))]
-    locationsweb = [x for (y, x) in sorted(zip(flatten_list(dates), flatten_list(locationsweb)))]
-    dates = sorted(flatten_list(dates))
+    dates = flatten_list(dates)
+    events = flatten_list(events)
+    web = flatten_list(web)
+    locations = flatten_list(locations)
+    locationsweb = flatten_list(locationsweb)
+    events_ = [points[1] for points in sorted(zip(dates, events, web, locations, locationsweb))]
+    web_ = [points[2] for points in sorted(zip(dates, events, web, locations, locationsweb))]
+    locations_ = [points[3] for points in sorted(zip(dates, events, web, locations, locationsweb))]
+    locationsweb_ = [points[4] for points in sorted(zip(dates, events, web, locations, locationsweb))]
+    dates_ = sorted(dates)
 
     print('[*] Generating table...')
-    out = generate_table(dates, events, web, locations, locationsweb)
+    out = generate_table(dates_, events_, web_, locations_, locationsweb_)
     print('[*] Updating sidebar...')
     set_sidebar(out)
     print('[*] Sleeping...')
