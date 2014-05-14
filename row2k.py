@@ -1,10 +1,11 @@
-from bs4 import BeautifulSoup
 import urllib.request as request
 import time
-import praw
 import re
 import os
 from configparser import ConfigParser
+
+from bs4 import BeautifulSoup
+import praw
 
 
 def parse_calendar(webpage):

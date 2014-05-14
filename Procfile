@@ -1,1 +1,1 @@
-go: python regattacentral.py
+go: python rowing_calendar.py
