@@ -34,11 +34,12 @@ def parse_regatta_central(webpage):
 def generate_table(dates, events, web, locations):
     out = '|**Race**|**Date**|**Venue**|\n|-|-|-|\n'
     for i in range(len(dates)):
-        if (dates[i] - datetime.now()).days < 7:
-            out += '|[' + events[i] + '](' + web[i] + ')|' + dates[i].strftime(
-                '%d %B') + '|' + locations[i] + '|\n'
-        else:
-            return out
+        if (dates[i] - datetime.now()).days >= -1:
+            if (dates[i] - datetime.now()).days < 7:
+                out += '|[' + events[i] + '](' + web[i] + ')|' + dates[i].strftime(
+                    '%d %B') + '|' + locations[i] + '|\n'
+            else:
+                return out
 
 
 def set_sidebar(out):
@@ -99,6 +100,7 @@ while True:
     print('[*] Generating table...')
     out = generate_table(dates_, events_, web_, locations_)
     print('[*] Updating sidebar...')
+    #print(out)
     set_sidebar(out)
     print('[*] Sleeping...')
     time.sleep(43200)
