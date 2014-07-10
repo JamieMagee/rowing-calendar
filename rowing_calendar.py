@@ -22,7 +22,7 @@ def parse_british_rowing(webpage):
 def parse_regatta_central(webpage):
     global dates, events, web, locations
     tree = html.fromstring(webpage)
-    dates.append([datetime.strptime(date.replace(' \n      ', ''), '%A%m/%d/%y') for date in
+    dates.append([datetime.strptime(date.replace(' \r\n      ', ''), '%A%m/%d/%y') for date in
                   tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
     events.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/text()'))
     web.append(['https://www.regattacentral.com' + site for site in
