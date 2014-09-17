@@ -101,6 +101,10 @@ while True:
     out = generate_table(dates_, events_, web_, locations_)
     print('[*] Updating sidebar...')
     #print(out)
-    set_sidebar(out)
+    if len(out) <= 5120:
+        set_sidebar(out)
+    else:
+        print('[*] Table too large')
+    
     print('[*] Sleeping...')
     time.sleep(43200)
