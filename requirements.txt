@@ -1,2 +1,2 @@
 lxml>=3.4.0
-praw>=2.1.18
+-e git+git://github.com/praw-dev/praw.git@praw3#egg=praw
