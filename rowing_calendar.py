@@ -22,7 +22,11 @@ def parse_british_rowing(webpage):
 def parse_regatta_central(webpage):
     global dates, events, web, locations
     tree = html.fromstring(webpage)
-    dates.append([datetime.strptime(date.replace(' \r\n      ', ''), '%A%m/%d/%y') for date in
+    try:
+        dates.append([datetime.strptime(date.replace(' \r\n      ', ''), '%A%m/%d/%y') for date in
+                  tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
+    except:
+        dates.append([datetime.strptime(date.replace(' \n      ', ''), '%A%m/%d/%y') for date in
                   tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[2]/text()')])
     events.append(tree.xpath('//*[@id="tableResults"]/tbody/tr[*]/td[4]/a/text()'))
     web.append(['https://www.regattacentral.com' + site for site in
@@ -100,7 +104,6 @@ while True:
     print('[*] Generating table...')
     out = generate_table(dates_, events_, web_, locations_)
     print('[*] Updating sidebar...')
-    #print(out)
     if len(out) <= 5120:
         set_sidebar(out)
     else:
